@@ -130,31 +130,22 @@ public class AVL {
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    System.out.println(balanceFactor(n));
     updateHeight(n);
     if(balanceFactor(n) < -1){
       if(balanceFactor(n.left) < 0){
-        System.out.println("Makes it here");
         rightRotate(n);
       }
       else{
-        System.out.println("Makes it here");
         leftRotate(n.left);
-        updateHeight(n.left);
-        updateHeight(n);
         rightRotate(n);
       }
     }
     else if(balanceFactor(n) > 1){
       if(balanceFactor(n.right) < 0){
-        System.out.println("Makes it here");
+        rightRotate(n.right);
         leftRotate(n);
       }
       else{
-        System.out.println("Makes it here");
-        rightRotate(n.right);
-        updateHeight(n.right);
-        updateHeight(n);
         leftRotate(n);
       }
     }
