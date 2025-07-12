@@ -41,8 +41,6 @@ public class AVL {
   /* insert w into the tree rooted at n, ignoring balance
    * pre: n is not null */
   private void bstInsert(Node n, String w) {
-    System.out.println(w.compareTo(n.word));
-    System.out.println(n.right);
     if(w.compareTo(n.word) < 0){
       if(n.left == null){
         size += 1;
@@ -100,6 +98,8 @@ public class AVL {
     }
     y.left = x;
     x.parent = y;
+    updateHeight(x);
+    updateHeight(y);
   }
 
   /** do a right rotation: rotate on the edge from x to its left child.
@@ -123,13 +123,68 @@ public class AVL {
     }
     x.right = y;
     y.parent = x;
+    updateHeight(y);
+    updateHeight(x);
   }
 
   /** rebalance a node N after a potentially AVL-violoting insertion.
   *  precondition: none of n's descendants violates the AVL property */
   public void rebalance(Node n) {
-    // TODO
+    System.out.println(balanceFactor(n));
+    updateHeight(n);
+    if(balanceFactor(n) < -1){
+      if(balanceFactor(n.left) < 0){
+        System.out.println("Makes it here");
+        rightRotate(n);
+      }
+      else{
+        System.out.println("Makes it here");
+        leftRotate(n.left);
+        updateHeight(n.left);
+        updateHeight(n);
+        rightRotate(n);
+      }
+    }
+    else if(balanceFactor(n) > 1){
+      if(balanceFactor(n.right) < 0){
+        System.out.println("Makes it here");
+        leftRotate(n);
+      }
+      else{
+        System.out.println("Makes it here");
+        rightRotate(n.right);
+        updateHeight(n.right);
+        updateHeight(n);
+        leftRotate(n);
+      }
+    }
   }
+
+
+
+  /**return the balance factor of a given node */
+  private int balanceFactor(Node n){
+    return findHeight(n.right) - findHeight(n.left);
+  }
+
+
+  /**updates height of node n */
+  private void updateHeight(Node n){
+    n.height = findHeight(n);
+  }
+
+
+
+  /**finds height of node n */
+  private int findHeight(Node n){
+    if(n == null){
+      return -1;
+    }
+    else{
+      return 1 + Math.max(findHeight(n.right), findHeight(n.left));
+    }
+  }
+
 
   /** remove the word w from the tree */
   public void remove(String w) {
