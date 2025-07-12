@@ -1,3 +1,10 @@
+/**
+ * Author: Logan Leo
+ * Date: 7/11/2025
+ * Purpose: AVL implementation
+ */
+
+
 package avl;
 
 public class AVL {
@@ -68,13 +75,43 @@ public class AVL {
   *  precondition: the tree is AVL balanced and any prior insertions have been
   *  performed by this method. */
   public void avlInsert(String w) {
-    // TODO
+    if(root == null){
+      root = new Node(w);
+      size = 1;
+      updateHeight(root);
+    }
+    avlInsert(root, w);
   }
 
   /* insert w into the tree, maintaining AVL balance
    *  precondition: the tree is AVL balanced and n is not null */
   private void avlInsert(Node n, String w) {
-    // TODO
+    if(w.compareTo(n.word) < 0){
+      if(n.left == null){
+        size += 1;
+        n.left = new Node(w, n);
+        updateHeight(n.left);
+        updateHeight(n);
+      }
+      else{
+        avlInsert(n.left, w);
+      }
+    }
+    else if(w.compareTo(n.word) > 0){
+      if(n.right == null){
+        size += 1;
+        n.right = new Node(w, n);
+        updateHeight(n.right);
+        updateHeight(n);
+      }
+      else{
+        avlInsert(n.right, w);
+      }
+    }
+    else{
+      return;
+    }
+    rebalance(n);
   }
 
   /** do a left rotation: rotate on the edge from x to its right child.
